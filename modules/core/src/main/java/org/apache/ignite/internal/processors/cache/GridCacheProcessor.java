@@ -99,6 +99,7 @@ import org.apache.ignite.internal.processors.cache.version.GridCacheVersionManag
 import org.apache.ignite.internal.processors.plugin.CachePluginManager;
 import org.apache.ignite.internal.processors.query.GridQueryProcessor;
 import org.apache.ignite.internal.util.F0;
+import org.apache.ignite.internal.util.GridDebug;
 import org.apache.ignite.internal.util.future.GridCompoundFuture;
 import org.apache.ignite.internal.util.future.GridFinishedFuture;
 import org.apache.ignite.internal.util.future.GridFutureAdapter;
@@ -2397,6 +2398,8 @@ public class GridCacheProcessor extends GridProcessorAdapter {
      * @param topVer Current topology version.
      */
     private void onCacheChangeRequested(DynamicCacheChangeBatch batch, AffinityTopologyVersion topVer) {
+        GridDebug.debug("onCacheChangeRequested", topVer, batch);
+
         for (DynamicCacheChangeRequest req : batch.requests()) {
             if (req.template()) {
                 CacheConfiguration ccfg = req.startCacheConfiguration();
