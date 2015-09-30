@@ -806,7 +806,7 @@ public class GridNearAtomicUpdateFuture extends GridFutureAdapter<Object>
 
             if (F.isEmpty(topNodes)) {
                 onDone(new ClusterTopologyServerNotFoundException("Failed to map keys for cache (all partition nodes " +
-                    "left the grid)."));
+                    "left the grid) " + topVer));
 
                 return;
             }

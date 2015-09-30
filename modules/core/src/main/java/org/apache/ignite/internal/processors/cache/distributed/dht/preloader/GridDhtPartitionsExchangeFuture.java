@@ -61,6 +61,7 @@ import org.apache.ignite.internal.processors.cache.version.GridCacheVersion;
 import org.apache.ignite.internal.processors.timeout.GridTimeoutObject;
 import org.apache.ignite.internal.processors.timeout.GridTimeoutObjectAdapter;
 import org.apache.ignite.internal.util.GridConcurrentHashSet;
+import org.apache.ignite.internal.util.GridDebug;
 import org.apache.ignite.internal.util.future.GridFutureAdapter;
 import org.apache.ignite.internal.util.tostring.GridToStringExclude;
 import org.apache.ignite.internal.util.tostring.GridToStringInclude;
@@ -502,6 +503,8 @@ public class GridDhtPartitionsExchangeFuture extends GridFutureAdapter<AffinityT
 
                 if (!F.isEmpty(reqs))
                     blockGateways();
+
+                GridDebug.debug("init exchange", exchId, oldest);
 
                 U.sleep();
 
@@ -1062,6 +1065,8 @@ public class GridDhtPartitionsExchangeFuture extends GridFutureAdapter<AffinityT
         cctx.exchange().onExchangeDone(this, err);
 
         if (super.onDone(res, err) && !dummy && !forcePreload) {
+            GridDebug.debug("exchange done", exchId, reqs);
+
             if (log.isDebugEnabled())
                 log.debug("Completed partition exchange [localNode=" + cctx.localNodeId() + ", exchange= " + this + ']');
 

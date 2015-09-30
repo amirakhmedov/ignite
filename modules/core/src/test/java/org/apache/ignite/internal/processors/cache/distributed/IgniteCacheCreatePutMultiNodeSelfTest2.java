@@ -22,8 +22,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.cache.CacheMode;
+import org.apache.ignite.cache.CacheServerNotFoundException;
 import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
+import org.apache.ignite.internal.util.GridDebug;
 import org.apache.ignite.internal.util.typedef.internal.U;
 import org.apache.ignite.marshaller.optimized.OptimizedMarshaller;
 import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
@@ -78,6 +80,8 @@ public class IgniteCacheCreatePutMultiNodeSelfTest2 extends GridCommonAbstractTe
      * @throws Exception If failed.
      */
     public void testStartNodes() throws Exception {
+        GridDebug.reset();
+
         long stopTime = System.currentTimeMillis() + 3 * 60_000;
 
         try {
@@ -99,12 +103,29 @@ public class IgniteCacheCreatePutMultiNodeSelfTest2 extends GridCommonAbstractTe
 
                             IgniteCache cache = ignite.getOrCreateCache("cache1");
 
-                            for (int i = 0; i < 100; i++)
-                                cache.put(i, i);
+                            try {
+                                for (int i = 0; i < 100; i++)
+                                    cache.put(i, i);
+                            }
+                            catch (CacheServerNotFoundException e) {
+                                synchronized (getClass()) {
+                                    e.printStackTrace();
+
+                                    GridDebug.debug("Error: " + e);
+
+                                    GridDebug.dumpWithReset();
+
+                                    System.exit(11);
+                                }
+
+                                throw e;
+                            }
 
                             return null;
                         }
                     }, GRID_CNT, "start");
+
+                    GridDebug.reset();
                 }
                 finally {
                     stopAllGrids();

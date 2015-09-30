@@ -79,6 +79,7 @@ import org.apache.ignite.internal.processors.security.SecurityContext;
 import org.apache.ignite.internal.processors.timeout.GridTimeoutProcessor;
 import org.apache.ignite.internal.util.F0;
 import org.apache.ignite.internal.util.GridBoundedConcurrentOrderedMap;
+import org.apache.ignite.internal.util.GridDebug;
 import org.apache.ignite.internal.util.GridSpinBusyLock;
 import org.apache.ignite.internal.util.future.GridFinishedFuture;
 import org.apache.ignite.internal.util.future.GridFutureAdapter;
@@ -506,6 +507,8 @@ public class GridDiscoveryManager extends GridManagerAdapter<DiscoverySpi> {
                 }
 
                 final AffinityTopologyVersion nextTopVer = new AffinityTopologyVersion(topVer, minorTopVer);
+
+                GridDebug.debug("onDiscovery", nextTopVer, type, customMsg);
 
                 if (type == EVT_NODE_FAILED || type == EVT_NODE_LEFT) {
                     for (DiscoCache c : discoCacheHist.values())

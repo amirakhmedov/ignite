@@ -29,6 +29,7 @@ import org.apache.ignite.cache.CacheMode;
 import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.internal.IgniteInternalFuture;
+import org.apache.ignite.internal.util.GridDebug;
 import org.apache.ignite.marshaller.optimized.OptimizedMarshaller;
 import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.TcpDiscoveryIpFinder;
@@ -88,6 +89,8 @@ public class CacheAffinityEarlyTest extends GridCommonAbstractTest {
                 log.info("Iteration: " + (i + 1) + '/' + iters);
 
                 doTest();
+
+                GridDebug.reset();
             }
             finally {
                 stopAllGrids(true);
@@ -136,6 +139,16 @@ public class CacheAffinityEarlyTest extends GridCommonAbstractTest {
                         log.error("Unexpected error: " + e, e);
 
                         failed.set(true);
+
+                        synchronized (getClass()) {
+                            e.printStackTrace();
+
+                            GridDebug.debug("Error: " + e);
+
+                            GridDebug.dumpWithReset();
+
+                            System.exit(11);
+                        }
                     }
                 }
             }, 1);

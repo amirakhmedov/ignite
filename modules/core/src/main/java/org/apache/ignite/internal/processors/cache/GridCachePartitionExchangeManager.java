@@ -60,6 +60,7 @@ import org.apache.ignite.internal.processors.cache.distributed.dht.preloader.Gri
 import org.apache.ignite.internal.processors.cache.transactions.IgniteInternalTx;
 import org.apache.ignite.internal.processors.cache.transactions.IgniteTxManager;
 import org.apache.ignite.internal.processors.timeout.GridTimeoutObject;
+import org.apache.ignite.internal.util.GridDebug;
 import org.apache.ignite.internal.util.GridListSet;
 import org.apache.ignite.internal.util.future.GridFutureAdapter;
 import org.apache.ignite.internal.util.tostring.GridToStringExclude;
@@ -229,6 +230,8 @@ public class GridCachePartitionExchangeManager<K, V> extends GridCacheSharedMana
                 }
 
                 if (exchId != null) {
+                    GridDebug.debug("add pending exchange", exchId, evt);
+
                     // Start exchange process.
                     pendingExchangeFuts.add(exchFut);
 
@@ -255,6 +258,8 @@ public class GridCachePartitionExchangeManager<K, V> extends GridCacheSharedMana
                         }
                     });
                 }
+                else
+                    GridDebug.debug("skip exchange", evt);
             }
             finally {
                 leaveBusy();
@@ -1134,8 +1139,11 @@ public class GridCachePartitionExchangeManager<K, V> extends GridCacheSharedMana
         void addFuture(GridDhtPartitionsExchangeFuture exchFut) {
             assert exchFut != null;
 
-            if (!exchFut.dummy() || (futQ.isEmpty() && !busy))
+            if (!exchFut.dummy() || (futQ.isEmpty() && !busy)) {
+                GridDebug.debug("offer future", exchFut.exchangeId());
+
                 futQ.offer(exchFut);
+            }
 
             if (log.isDebugEnabled())
                 log.debug("Added exchange future to exchange worker: " + exchFut);
