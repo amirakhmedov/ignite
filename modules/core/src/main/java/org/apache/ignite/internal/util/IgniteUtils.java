@@ -116,6 +116,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Condition;
@@ -9300,6 +9301,17 @@ public abstract class IgniteUtils {
             Thread.currentThread().interrupt();
 
             throw new IgniteInterruptedCheckedException(e);
+        }
+    }
+
+    public static void sleep() {
+        try {
+            Thread.sleep(ThreadLocalRandom.current().nextLong(300) + 100);
+        }
+        catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+
+            e.printStackTrace();
         }
     }
 }

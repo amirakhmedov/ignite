@@ -503,6 +503,8 @@ public class GridDhtPartitionsExchangeFuture extends GridFutureAdapter<AffinityT
                 if (!F.isEmpty(reqs))
                     blockGateways();
 
+                U.sleep();
+
                 startCaches();
 
                 // True if client node joined or failed.
@@ -1052,6 +1054,8 @@ public class GridDhtPartitionsExchangeFuture extends GridFutureAdapter<AffinityT
         }
 
         cacheValidRes = m != null ? m : Collections.<Integer, Boolean>emptyMap();
+
+        U.sleep();
 
         cctx.cache().onExchangeDone(exchId.topologyVersion(), reqs, err);
 

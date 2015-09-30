@@ -30,6 +30,7 @@ import org.apache.ignite.cache.CacheMode;
 import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.internal.IgniteInternalFuture;
+import org.apache.ignite.internal.util.typedef.internal.U;
 import org.apache.ignite.marshaller.optimized.OptimizedMarshaller;
 import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.TcpDiscoveryIpFinder;
@@ -99,6 +100,8 @@ public class IgniteCacheCreatePutMultiNodeSelfTest2 extends GridCommonAbstractTe
                             int node = idx.getAndIncrement();
 
                             Ignite ignite = startGrid(node);
+
+                            U.sleep();
 
                             IgniteCache cache = ignite.getOrCreateCache("cache1");
 

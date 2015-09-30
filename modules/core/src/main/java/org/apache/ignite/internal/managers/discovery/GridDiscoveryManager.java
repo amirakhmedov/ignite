@@ -465,6 +465,8 @@ public class GridDiscoveryManager extends GridManagerAdapter<DiscoverySpi> {
                 final Map<Long, Collection<ClusterNode>> snapshots,
                 @Nullable DiscoverySpiCustomMessage spiCustomMsg
             ) {
+                U.sleep();
+
                 if (type == EVT_NODE_JOINED && node.isLocal() && ctx.clientDisconnected()) {
                     discoCacheHist.clear();
 
