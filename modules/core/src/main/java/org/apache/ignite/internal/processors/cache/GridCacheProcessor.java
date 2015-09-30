@@ -2444,10 +2444,16 @@ public class GridCacheProcessor extends GridProcessorAdapter {
                     }
                 }
                 else {
-                    if (req.clientStartOnly()) {
-                        assert req.initiatingNodeId() != null : req;
+                    assert req.initiatingNodeId() != null : req;
 
-                        needExchange = ctx.discovery().addClientNode(req.cacheName(),
+                    // Cache already exists, exchange is needed only if client cache should be created.
+                    ClusterNode node = ctx.discovery().node(req.initiatingNodeId());
+
+                    boolean clientReq = node != null &&
+                        !ctx.discovery().cacheAffinityNode(node, req.cacheName());
+
+                    if (req.clientStartOnly()) {
+                        needExchange = clientReq && ctx.discovery().addClientNode(req.cacheName(),
                             req.initiatingNodeId(),
                             req.nearCacheConfiguration() != null);
                     }
@@ -2459,11 +2465,6 @@ public class GridCacheProcessor extends GridProcessorAdapter {
                         }
                         else {
                             // Cache already exists, exchange is needed only if client cache should be created.
-                            ClusterNode node = ctx.discovery().node(req.initiatingNodeId());
-
-                            boolean clientReq = node != null &&
-                                !ctx.discovery().cacheAffinityNode(node, req.cacheName());
-
                             needExchange = clientReq && ctx.discovery().addClientNode(req.cacheName(),
                                 req.initiatingNodeId(),
                                 req.nearCacheConfiguration() != null);

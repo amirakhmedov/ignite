@@ -46,7 +46,7 @@ public class CacheAffinityEarlyTest extends GridCommonAbstractTest {
     private volatile boolean stopped;
 
     /** Iteration. */
-    private static final int iters = 10;
+    private static final int iters = 5;
 
     /** Concurrent. */
     private static final boolean concurrent = true;
@@ -76,7 +76,7 @@ public class CacheAffinityEarlyTest extends GridCommonAbstractTest {
 
     /** {@inheritDoc} */
     @Override protected long getTestTimeout() {
-        return 6 * 60 * 1000L;
+        return 10 * 60 * 1000L;
     }
 
     /**
