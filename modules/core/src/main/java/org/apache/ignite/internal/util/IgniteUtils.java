@@ -9305,13 +9305,13 @@ public abstract class IgniteUtils {
     }
 
     public static void sleep() {
-        try {
-            Thread.sleep(ThreadLocalRandom.current().nextLong(100) + 50);
-        }
-        catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(ThreadLocalRandom.current().nextLong(100) + 50);
+//        }
+//        catch (InterruptedException e) {
+//            Thread.currentThread().interrupt();
+//
+//            e.printStackTrace();
+//        }
     }
 }
