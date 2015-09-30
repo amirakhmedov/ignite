@@ -138,14 +138,15 @@ public class IgniteCacheTestSuite4 extends TestSuite {
     public static TestSuite suite() throws Exception {
         TestSuite suite = new TestSuite("IgniteCache Test Suite part 4");
 
-        suite.addTestSuite(CacheAffinityEarlyTest.class);
         suite.addTestSuite(IgniteCacheCreatePutMultiNodeSelfTest2.class);
-        suite.addTestSuite(CacheAffinityEarlyTest.class);
         suite.addTestSuite(IgniteCacheCreatePutMultiNodeSelfTest2.class);
-        suite.addTestSuite(CacheAffinityEarlyTest.class);
         suite.addTestSuite(IgniteCacheCreatePutMultiNodeSelfTest2.class);
-        suite.addTestSuite(CacheAffinityEarlyTest.class);
         suite.addTestSuite(IgniteCacheCreatePutMultiNodeSelfTest2.class);
+
+        suite.addTestSuite(CacheAffinityEarlyTest.class);
+        suite.addTestSuite(CacheAffinityEarlyTest.class);
+        suite.addTestSuite(CacheAffinityEarlyTest.class);
+        suite.addTestSuite(CacheAffinityEarlyTest.class);
 
         return suite;
     }

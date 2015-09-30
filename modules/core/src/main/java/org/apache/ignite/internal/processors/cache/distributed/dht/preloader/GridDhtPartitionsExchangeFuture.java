@@ -708,15 +708,27 @@ public class GridDhtPartitionsExchangeFuture extends GridFutureAdapter<AffinityT
 
                 assert exchId.nodeId().equals(discoEvt.eventNode().id());
 
-                for (GridCacheContext cacheCtx : cctx.cacheContexts()) {
-                    GridClientPartitionTopology clientTop = cctx.exchange().clearClientTopology(
-                        cacheCtx.cacheId());
+                try {
+                    for (GridCacheContext cacheCtx : cctx.cacheContexts()) {
+                        GridClientPartitionTopology clientTop = cctx.exchange().clearClientTopology(
+                            cacheCtx.cacheId());
 
-                    long updSeq = clientTop == null ? -1 : clientTop.lastUpdateSequence();
+                        long updSeq = clientTop == null ? -1 : clientTop.lastUpdateSequence();
 
-                    // Update before waiting for locks.
-                    if (!cacheCtx.isLocal())
-                        cacheCtx.topology().updateTopologyVersion(exchId, this, updSeq, stopping(cacheCtx.cacheId()));
+                        // Update before waiting for locks.
+                        if (!cacheCtx.isLocal())
+                            cacheCtx.topology().updateTopologyVersion(exchId, this, updSeq, stopping(cacheCtx.cacheId()));
+                    }
+
+                }
+                catch (AssertionError e) {
+                    e.printStackTrace();
+
+                    synchronized (getClass()) {
+                        GridDebug.dumpWithReset();
+                    }
+
+                    System.exit(55);
                 }
 
                 // Grab all alive remote nodes with order of equal or less than last joined node.
